@@ -2,10 +2,12 @@ class ArticlesController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[ index show ]
   before_action :set_article, only: %i[ edit update destroy ]
 
+
   # GET /articles or /articles.json
   def index
-    @articles = Article.all
-    @articles = Article.page(params[:page]).per(10)
+    articles = Article.all
+    articles = articles.where("title LIKE ?", "%#{params[:title]}%") if params[:title].present?
+    @articles = articles.page params[:page]
   end
 
   # GET /articles/1 or /articles/1.json
@@ -64,5 +66,4 @@ class ArticlesController < ApplicationController
     def article_params
       params.require(:article).permit(:title, :content)
     end
-
 end
