@@ -7,6 +7,8 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # db/seeds.rb
+tags = %w(学習 転職活動 豆知識 その他)
+tags.each { |tag| Tag.find_or_create_by!(name: tag) }
 
 3.times do |i|
   i += 1

@@ -1,6 +1,7 @@
 class ArticlesController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[ index show ]
-  before_action :set_article, only: %i[ edit update destroy ]
+  before_action :set_article, only: %i[ show edit update destroy ]
+  # before_action :set_tag, only: %i[ update ]
 
 
   # GET /articles or /articles.json
@@ -27,6 +28,7 @@ class ArticlesController < ApplicationController
   # POST /articles or /articles.json
   def create
       @article = current_user.articles.new(article_params)
+      # @article = Tag.new(params[:tag_ids])
 
       respond_to do |format|
         if @article.save
@@ -62,8 +64,17 @@ class ArticlesController < ApplicationController
       @article = current_user.articles.find(params[:id])
     end
 
+    # def set_tag
+    #   @tag = TagArticle.find(params[:id])
+    # end
+
     # Only allow a list of trusted parameters through.
     def article_params
-      params.require(:article).permit(:title, :content)
+      # binding.pry
+      params.require(:article).permit(:title, :content, tag_ids:[])
     end
+
+    # def tag_params
+    #   params.require(:article).permit(tag_id:[])
+    # end
 end
